@@ -15,9 +15,17 @@ router.use(bodyParser.urlencoded({ extended: true }));
 router.use(bodyParser.json());
 
 router.post('/dialogflow', (req, res) => {
-  console.log(req.body);
-  console.log(req.body);
-  console.log(req.body);
+  const { action, room, number } = req.body.queryResult.parameters;
+  console.log(req.body.queryResult.parameters);
+  if (number) {
+    return postPercent.percent(number, room, res);
+  }
+  if (action === 'up') {
+    return postUp.up(room, res);
+  }
+  if (action === 'down') {
+    return postDown.down(room, res);
+  }
 })
 
 router.post('/down', (req, res) => {
