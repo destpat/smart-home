@@ -7,19 +7,17 @@ const rollerTimeConfig = require('../config').rollerTime;
 const postPercent = require('./action/percent');
 const postUp = require('./action/up');
 const postDown = require('./action/down');
-let currentPosition = require('./currentPosition')
-
-const client =  mqtt.connect(mqttConfig.url, { username : mqttConfig.username, password: mqttConfig.password });
+const client = require('./utilis/mqttConnect').getClient();
 
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(bodyParser.json());
 
 router.post('/dialogflow', (req, res) => {
-  const { action, room, percentage } = req.body.queryResult.parameters;
+  const { action, room, position } = req.body.queryResult.parameters;
   console.log(req.body.queryResult.parameters);
-  if (percentage) {
-    console.log(parseInt(percentage));
-    return postPercent.percent(parseInt(percentage), room, res);
+  if (position) {
+    console.log(parseInt(position));
+    return postPercent.percent(parseInt(position), room, res);
   }
   if (action === 'up') {
     return postUp.up(room, res);
@@ -37,9 +35,10 @@ router.post('/up', (req, res) => {
   postUp.up(req.body.room, res)
 });
 
-router.post('/:percent', (req, res) => {
-  let percent = parseInt(req.params.percent);
-  postPercent.percent(percent, req.body.room, res);
+router.post('/:position', (req, res) => {
+  let position = parseInt(req.params.position);
+  console.log(position);
+  postPercent.percent(position, req.body.room, res);
 });
 
 module.exports = router;
