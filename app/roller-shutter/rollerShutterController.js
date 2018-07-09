@@ -24,6 +24,10 @@ router.post('/dialogflow', (req, res) => {
   }
   if (action === 'down') {
     return postDown.down(room, res);
+  } else {
+    res.status(400).send({
+      message: 'No valide data'
+    })
   }
 })
 
