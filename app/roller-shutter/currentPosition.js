@@ -1,10 +1,10 @@
-// File: helpers/nameHelper.js
-var position = 0;
+const config = require('../config');
 
-exports.getPosition = function() {
-  return position;
+exports.getPosition = function(room) {
+  console.log(room);
+  return config.rollerShutter[room].currentPosition
 };
 
-exports.setPosition = function(newPosition) {
-  position = newPosition;
+exports.setPosition = function(room, newPosition) {
+  config.rollerShutter[room].currentPosition = newPosition
 };

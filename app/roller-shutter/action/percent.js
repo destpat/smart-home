@@ -10,7 +10,7 @@ exports.percent = (percent, room, res) => {
   * la cuisine avec le pourcentage donnée
   * en paramétre
   */
-  currentPosition = position.getPosition();
+  currentPosition = position.getPosition(room);
 
   if (percent > 0 && percent <= 100 && percent !== currentPosition) {
     let percentToMilliseconds = (percent) => {
@@ -20,7 +20,7 @@ exports.percent = (percent, room, res) => {
       let downTime = sonoffHelper.millisecondsToSonoffTime(percentToMilliseconds(percent) - percentToMilliseconds(currentPosition)).toString();
       client.publish(`cmnd/${room}/pulseTime1`, downTime, () => {
         client.publish(`cmnd/${room}/power1`, '1', () => {
-          position.setPosition(percent);
+          position.setPosition(room, percent);
           console.log({
             message: 'Done',
             downTime: downTime,
@@ -37,7 +37,7 @@ exports.percent = (percent, room, res) => {
       let upTime = sonoffHelper.millisecondsToSonoffTime(percentToMilliseconds(currentPosition) - percentToMilliseconds(percent)).toString()
       client.publish(`cmnd/${room}/pulseTime2`, upTime , () => {
         client.publish(`cmnd/${room}/power2`, '1', () => {
-          position.setPosition(percent);
+          position.setPosition(room, percent);
           console.log({
             message: 'Done',
             upTime: upTime,

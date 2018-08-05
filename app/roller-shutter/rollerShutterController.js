@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const bodyParser = require('body-parser');
+
 const mqtt = require('mqtt');
 const mqttConfig = require('../config').mqtt;
-const rollerTimeConfig = require('../config').rollerTime;
 const postPercent = require('./action/percent');
 const postUp = require('./action/up');
 const postDown = require('./action/down');
@@ -13,17 +13,31 @@ router.use(bodyParser.urlencoded({ extended: true }));
 router.use(bodyParser.json());
 
 router.post('/dialogflow', (req, res) => {
-  const { action, room, position } = req.body.queryResult.parameters;
-  console.log(req.body.queryResult.parameters);
+  const { action, room, position, room1, room2 } = req.body.queryResult.parameters;
+  let multiRoom = room1 !== '' && room2 !== '';
   if (position) {
-    console.log(parseInt(position));
-    return postPercent.percent(parseInt(position), room, res);
+    if (multiRoom) {
+      postPercent.percent(parseInt(position), room1, res);
+      return postPercent.percent(parseInt(position), room2, res);
+    } else {
+      return postPercent.percent(parseInt(position), room, res);
+    }
   }
   if (action === 'up') {
-    return postUp.up(room, res);
+    if (multiRoom) {
+      postUp.up(room1, res);
+      return postUp.up(room2, res);
+    } else {
+      return postUp.up(room, res);
+    }
   }
   if (action === 'down') {
-    return postDown.down(room, res);
+    if (multiRoom) {
+      postDown.down(room1, res);
+      return postDown.down(room2, res);
+    } else {
+      return postDown.down(room, res);
+    }
   } else {
     res.status(400).send({
       message: 'No valide data'
@@ -41,7 +55,6 @@ router.post('/up', (req, res) => {
 
 router.post('/:position', (req, res) => {
   let position = parseInt(req.params.position);
-  console.log(position);
   postPercent.percent(position, req.body.room, res);
 });
 
