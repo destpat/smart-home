@@ -8,10 +8,6 @@ exports.down = (room, res) => {
   client.publish(`cmnd/${room}/pulseTime1`, downTime , () => {
     client.publish(`cmnd/${room}/power1`, '1', () => {
       currentPosition.setPosition(room, 100);
-      res.status(200).send({
-        message: 'Rolling shutter is close',
-        downTime: downTime
-      });
     });
   });
 }

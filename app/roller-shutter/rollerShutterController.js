@@ -14,30 +14,25 @@ router.use(bodyParser.json());
 
 router.post('/dialogflow', (req, res) => {
   const { action, room, position, room1, room2 } = req.body.queryResult.parameters;
-  let multiRoom = room1 !== '' && room2 !== '';
+  let roomList = [room, room1, room2];
+
   if (position) {
-    if (multiRoom) {
-      postPercent.percent(parseInt(position), room1, res);
-      return postPercent.percent(parseInt(position), room2, res);
-    } else {
-      return postPercent.percent(parseInt(position), room, res);
-    }
+    roomList.map((room) => {
+      room ? postPercent.percent(parseInt(position), room, res) : undefined;
+    })
+    return res.status(200).send({ message: 'Done'})
   }
   if (action === 'up') {
-    if (multiRoom) {
-      postUp.up(room1, res);
-      return postUp.up(room2, res);
-    } else {
-      return postUp.up(room, res);
-    }
+    roomList.map((room) => {
+      room ? postUp.up(room, res) : undefined;
+    })
+    return res.status(200).send({ message: 'Done' })
   }
   if (action === 'down') {
-    if (multiRoom) {
-      postDown.down(room1, res);
-      return postDown.down(room2, res);
-    } else {
-      return postDown.down(room, res);
-    }
+    roomList.map((room) => {
+      room ? postDown.down(room, res) : undefined;
+    })
+    return res.status(200).send({ message: 'Done' })
   } else {
     res.status(400).send({
       message: 'No valide data'

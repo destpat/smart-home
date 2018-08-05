@@ -7,7 +7,7 @@ exports.percent = (percent, room, res) => {
   /**
   * @description
   * Descend le volet roulant de
-  * la cuisine avec le pourcentage donnée
+  * avec le pourcentage donnée
   * en paramétre
   */
   currentPosition = position.getPosition(room);
@@ -26,11 +26,6 @@ exports.percent = (percent, room, res) => {
             downTime: downTime,
             currentPosition: currentPosition
           });
-          res.status(200).send({
-            message: 'Done',
-            downTime: downTime,
-            currentPosition: currentPosition
-          })
         });
       });
     } else {
@@ -43,11 +38,6 @@ exports.percent = (percent, room, res) => {
             upTime: upTime,
             currentPosition: currentPosition
           });
-          res.status(200).send({
-            message: 'Done',
-            upTime: upTime,
-            currentPosition: currentPosition
-          })
         });
       });
     }
