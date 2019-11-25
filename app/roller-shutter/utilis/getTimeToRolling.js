@@ -1,5 +1,5 @@
-var config = require('../../config')
+const rollerShutterConfig = require('../../config').rollerShutter
 
 exports.getTimeToRolling = (room) => {
-  return config.rollerShutter[room].rollingTime;
+  return rollerShutterConfig[room].rollingTime;
 }

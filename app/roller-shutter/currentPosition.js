@@ -1,10 +1,9 @@
-const config = require('../config');
+const rollerShutterConfig = require('../config').rollerShutter;
 
 exports.getPosition = function(room) {
-  console.log(room);
-  return config.rollerShutter[room].currentPosition
+  return rollerShutterConfig[room].currentPosition
 };
 
 exports.setPosition = function(room, newPosition) {
-  config.rollerShutter[room].currentPosition = newPosition
+  rollerShutterConfig[room].currentPosition = newPosition
 };

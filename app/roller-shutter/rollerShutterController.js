@@ -4,53 +4,29 @@ const bodyParser = require('body-parser');
 
 const mqtt = require('mqtt');
 const mqttConfig = require('../config').mqtt;
-const postPercent = require('./action/percent');
-const postUp = require('./action/up');
-const postDown = require('./action/down');
-const client = require('./utilis/mqttConnect').getClient();
+const percent = require('./action/percent');
+const up = require('./action/up');
+const down = require('./action/down');
 
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(bodyParser.json());
 
-router.post('/dialogflow', (req, res) => {
-  const { action, room, position, room1, room2 } = req.body.queryResult.parameters;
-  let roomList = [room, room1, room2];
-
-  if (position) {
-    roomList.map((room) => {
-      room ? postPercent.percent(parseInt(position), room, res) : undefined;
-    })
-    return res.status(200).send({ message: 'Done'})
+router.post('/', (req, res) => {
+  console.log(req.body.action);
+  switch (req.body.action) {
+    case 'percent':
+    console.log(req.body.percent);
+      let position = parseInt(req.body.percent);
+      percent.percent(position, req.body.room, res);
+      return res.status(200).send({ message: 'Done'})
+    case 'up':
+        up.up(req.body.room, res)
+      return res.status(200).send({ message: 'Done'})
+      case 'down':
+        down.down(req.body.room, res)
+      return res.status(200).send({ message: 'Done'})
+    default:
   }
-  if (action === 'up') {
-    roomList.map((room) => {
-      room ? postUp.up(room, res) : undefined;
-    })
-    return res.status(200).send({ message: 'Done' })
-  }
-  if (action === 'down') {
-    roomList.map((room) => {
-      room ? postDown.down(room, res) : undefined;
-    })
-    return res.status(200).send({ message: 'Done' })
-  } else {
-    res.status(400).send({
-      message: 'No valide data'
-    })
-  }
-})
-
-router.post('/down', (req, res) => {
-  postDown.down(req.body.room, res)
-});
-
-router.post('/up', (req, res) => {
-  postUp.up(req.body.room, res)
-});
-
-router.post('/:position', (req, res) => {
-  let position = parseInt(req.params.position);
-  postPercent.percent(position, req.body.room, res);
 });
 
 module.exports = router;

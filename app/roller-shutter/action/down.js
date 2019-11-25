@@ -1,7 +1,8 @@
 const currentPosition = require('../currentPosition');
 const sonoffHelper = require('../utilis/millisecondsToSonoffTime');
 const rollingHelper = require('../utilis/getTimeToRolling');
-const client = require('../utilis/mqttConnect').getClient();
+const client = require('../../mqttConnect').getClient();
+
 
 exports.down = (room, res) => {
   let downTime = sonoffHelper.millisecondsToSonoffTime(rollingHelper.getTimeToRolling(room)).toString();
