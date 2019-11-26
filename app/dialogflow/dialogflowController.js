@@ -27,7 +27,9 @@ router.post('/', (req, res) => {
     part
   } = req.body.queryResult.parameters;
   let roomList = [room, room1, room2];
-
+  console.log('******* PARAMS **********');
+  console.log(req.body.queryResult.parameters);
+  console.log('******* PARAMS **********');
   if (device === "roller_shutter") {
     if (position) {
       roomList.map((room) => {
@@ -69,6 +71,7 @@ router.post('/', (req, res) => {
       message: 'Finish'
     })
   }
+
   if (device === "light" && part) {
     if (action === 'on') {
       kitchenOn.on(part)
@@ -80,6 +83,9 @@ router.post('/', (req, res) => {
       message: 'Finish'
     })
   }
+  return res.status(200).send({
+    message: 'Finish'
+  })
 })
 
 module.exports = router;

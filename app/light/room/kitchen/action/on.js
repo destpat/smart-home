@@ -2,7 +2,7 @@ const client = require('../../../../mqttConnect').getClient();
 
 exports.on = (part, res) => {
   switch (part) {
-    case 'letf':
+    case 'left':
       client.publish('cmnd/kitchen_light/power1', '1');
       break;
     case 'right':
